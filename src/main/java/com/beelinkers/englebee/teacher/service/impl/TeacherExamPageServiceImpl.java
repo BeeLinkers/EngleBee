@@ -43,9 +43,12 @@ public class TeacherExamPageServiceImpl implements TeacherExamPageService {
     Member teacher = validateAndGetTeacher(teacherSeq);
     Exam exam = validateExamAndCheckIsPreparedForRegistration(teacher, examSeq);
     Lecture lecture = exam.getLecture();
+    Member student = lecture.getStudent();
     Map<String, String> lectureSubjectLevels = extractLectureSubjectLevels(lecture);
-    Map<String, String> studentSubjectLevels = extractStudentSubjectLevels(lecture.getStudent());
-    return mapToTeacherExamRegisterPageDTO(lectureSubjectLevels, studentSubjectLevels);
+    Map<String, String> studentSubjectLevels = extractStudentSubjectLevels(student);
+    String studentGrade = student.getGrade().getKoreanGrade();
+    return mapToTeacherExamRegisterPageDTO(studentGrade, lectureSubjectLevels,
+        studentSubjectLevels);
   }
 
   @Override
@@ -99,9 +102,9 @@ public class TeacherExamPageServiceImpl implements TeacherExamPageService {
     return studentSubjectLevelsMap;
   }
 
-  private TeacherExamRegisterPageDTO mapToTeacherExamRegisterPageDTO(
+  private TeacherExamRegisterPageDTO mapToTeacherExamRegisterPageDTO(String studentGrade,
       Map<String, String> lectureSubjectLevels, Map<String, String> studentSubjectLevels) {
-    return teacherExamRegisterPageMapper.toExamRegisterPageDTO(lectureSubjectLevels,
+    return teacherExamRegisterPageMapper.toExamRegisterPageDTO(studentGrade, lectureSubjectLevels,
         studentSubjectLevels);
   }
 

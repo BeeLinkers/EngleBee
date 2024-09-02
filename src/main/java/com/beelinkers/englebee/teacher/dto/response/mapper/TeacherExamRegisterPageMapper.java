@@ -7,8 +7,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class TeacherExamRegisterPageMapper {
 
-  public TeacherExamRegisterPageDTO toExamRegisterPageDTO(Map<String, String> lectureSubjectLevels,
+  public TeacherExamRegisterPageDTO toExamRegisterPageDTO(String studentGrade,
+      Map<String, String> lectureSubjectLevels,
       Map<String, String> studentSubjectLevels) {
-    return new TeacherExamRegisterPageDTO(studentSubjectLevels, lectureSubjectLevels);
+    return new TeacherExamRegisterPageDTO(studentGrade, studentSubjectLevels, lectureSubjectLevels);
   }
 }
