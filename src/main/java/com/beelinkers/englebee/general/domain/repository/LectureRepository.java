@@ -15,7 +15,7 @@ public interface LectureRepository extends JpaRepository<Lecture, Long> {
 
   // 선생님 강의 목록 조회
   @EntityGraph(attributePaths = {"subjectLevels.subjectLevel", "student"})
-  List<Lecture> findByTeacherSeqAndSeqAndStatus(Long teacherSeq, Long lectureSeq,
+  List<Lecture> findByTeacherSeqAndStatus(Long teacherSeq,
       LectureStatus status);
 }
 
