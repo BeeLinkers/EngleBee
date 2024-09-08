@@ -1,16 +1,17 @@
 package com.beelinkers.englebee.general.dto.response;
 
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Getter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class SubjectLevelCodeDTO {
 
-  private List<String> subjectCode;
-  private List<String> levelCode;
+  private String subjectCode;
+  private String levelCode;
 
 }
