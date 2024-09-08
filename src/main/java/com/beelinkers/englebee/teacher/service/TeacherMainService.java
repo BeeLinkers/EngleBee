@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface TeacherMainService {
 
-  List<TeacherMainPageLectureDTO> getOngoingLectureInfo(Long memberSeq, Long lectureSeq,
+  List<TeacherMainPageLectureDTO> getOngoingLectureInfo(Long memberSeq,
       LectureStatus lectureStatus);
 
   List<TeacherMainPagePendingExamDTO> getPendingExamInfo(Long memberSeq, ExamStatus status);

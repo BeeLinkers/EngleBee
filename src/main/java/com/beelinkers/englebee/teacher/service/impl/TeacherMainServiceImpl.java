@@ -27,9 +27,9 @@ public class TeacherMainServiceImpl implements TeacherMainService {
 
   // lecture
   @Override
-  public List<TeacherMainPageLectureDTO> getOngoingLectureInfo(Long memberSeq, Long lectureSeq,
+  public List<TeacherMainPageLectureDTO> getOngoingLectureInfo(Long memberSeq,
       LectureStatus lectureStatus) {
-    return lectureRepository.findByTeacherSeqAndSeqAndStatus(memberSeq, lectureSeq, lectureStatus)
+    return lectureRepository.findByTeacherSeqAndStatus(memberSeq, lectureStatus)
         .stream()
         .map(teacherMainPageMapper::teacherMainPageLectureDto)
         .collect(Collectors.toList());
