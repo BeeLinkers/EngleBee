@@ -59,7 +59,7 @@ public class StudentMainApiControllerTest {
     List<String> subjectCodes = List.of("어법", "문법");
     List<String> levelCodes = List.of("중", "고");
 
-    SubjectLevelCodeDTO subjectLevelCode = new SubjectLevelCodeDTO(subjectCodes, levelCodes);
+    SubjectLevelCodeDTO subjectLevelCode = new SubjectLevelCodeDTO();
     StudentMainPageLectureDTO lecturePageList = new StudentMainPageLectureDTO(
         1L, "teacher", "기초어법강의", "CREATED", LocalDateTime.now(), subjectLevelCode
     );
