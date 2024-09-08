@@ -25,7 +25,7 @@ public class StudentMainPageMapper {
             .getKoreanCode())
         .collect(Collectors.toList());
 
-    SubjectLevelCodeDTO subjectLevelCode = new SubjectLevelCodeDTO(subjectCode, levelCode);
+    SubjectLevelCodeDTO subjectLevelCode = new SubjectLevelCodeDTO();
 
     return new StudentMainPageLectureDTO(
         lecture.getSeq(),
