@@ -37,16 +37,16 @@ public class LectureServiceImpl implements LectureService {
   @Override
   public void createLecture(Long teacherSeq,
       TeacherRegisterLectureRequestDTO teacherRegisterLectureRequestDTO) {
-    Member teacher =  memberRepository.findById(teacherSeq)
-        .orElseThrow(()->new MemberNotFoundException("해당 선생님이 존재하지 않습니다."));
+    Member teacher = memberRepository.findById(teacherSeq)
+        .orElseThrow(() -> new MemberNotFoundException("해당 선생님이 존재하지 않습니다."));
     Member student = memberRepository.findByNickname(
-        teacherRegisterLectureRequestDTO.getStudentNickname())
-        .orElseThrow(()->new MemberNotFoundException("해당 학생이 존재하지 않습니다."));
+            teacherRegisterLectureRequestDTO.getStudentNickname())
+        .orElseThrow(() -> new MemberNotFoundException("해당 학생이 존재하지 않습니다."));
 
     Lecture lecture = Lecture.builder()
         .teacher(teacher)
         .student(student)
-        .title(teacherRegisterLectureRequestDTO.getLetureTitle())
+        .title(teacherRegisterLectureRequestDTO.getLectureTitle())
         .build();
     lectureRepository.save(lecture);
 
@@ -59,28 +59,30 @@ public class LectureServiceImpl implements LectureService {
       String level = subjectLevel.getLevel();
       String subject = subjectLevel.getSubject();
 
-      if(level.equals(" ")){
+      if (level.equals(" ")) {
         continue;
       }
-        levels.add(LevelCode.fromKoreanCode(level));
-        subjects.add(SubjectCode.fromKoreanCode(subject));
-        levelChecked = true;
+      levels.add(LevelCode.fromKoreanCode(level));
+      subjects.add(SubjectCode.fromKoreanCode(subject));
+      levelChecked = true;
     }
-    if(!levelChecked){
+    if (!levelChecked) {
       throw new NoSubjectLevelException("과목 레벨을 선택해주세요");
     }
 
     List<SubjectLevel> subjectLevels = new ArrayList<>();
 
-    for(int i=0;i<levels.size();i++) {
-      subjectLevels.add(subjectLevelRepository.findBySubjectCodeAndLevelCode(subjects.get(i),levels.get(i)).orElseThrow(()->new InvalidSubjectLevelCodeException("해당하는 과목 레벨 수준이 존재하지 않습니다")));
+    for (int i = 0; i < levels.size(); i++) {
+      subjectLevels.add(
+          subjectLevelRepository.findBySubjectCodeAndLevelCode(subjects.get(i), levels.get(i))
+              .orElseThrow(() -> new InvalidSubjectLevelCodeException("해당하는 과목 레벨 수준이 존재하지 않습니다")));
     }
 
-    for(SubjectLevel sl : subjectLevels){
+    for (SubjectLevel sl : subjectLevels) {
       LectureSubjectLevel lectureSubjectLevel = LectureSubjectLevel.builder()
-        .lecture(lecture)
-        .subjectLevel(sl)
-        .build();
+          .lecture(lecture)
+          .subjectLevel(sl)
+          .build();
       lectureSubjectLevelRepository.save(lectureSubjectLevel);
     }
   }
