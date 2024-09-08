@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -27,6 +28,7 @@ public class TeacherMainServiceImpl implements TeacherMainService {
 
   // lecture
   @Override
+  @Transactional
   public List<TeacherMainPageLectureDTO> getOngoingLectureInfo(Long memberSeq,
       LectureStatus lectureStatus) {
     return lectureRepository.findByTeacherSeqAndStatus(memberSeq, lectureStatus)
@@ -37,6 +39,7 @@ public class TeacherMainServiceImpl implements TeacherMainService {
 
   // pending-exam
   @Override
+  @Transactional(readOnly = true)
   public List<TeacherMainPagePendingExamDTO> getPendingExamInfo(Long memberSeq,
       ExamStatus status) {
     return examRepository.findTop5ByLectureTeacherSeqAndStatusOrderByCreatedAtDesc(memberSeq,
@@ -46,6 +49,7 @@ public class TeacherMainServiceImpl implements TeacherMainService {
 
   // exam-history
   @Override
+  @Transactional(readOnly = true)
   public List<TeacherMainPageExamHistoryDTO> getExamHistoryInfo(Long memberSeq,
       List<ExamStatus> status) {
     List<TeacherMainPageExamHistoryDTO> examHistoryList = new ArrayList<>();
