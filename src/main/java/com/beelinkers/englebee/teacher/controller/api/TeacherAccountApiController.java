@@ -1,5 +1,7 @@
 package com.beelinkers.englebee.teacher.controller.api;
 
+import com.beelinkers.englebee.auth.annotation.LoginMember;
+import com.beelinkers.englebee.auth.oauth2.session.SessionMember;
 import com.beelinkers.englebee.teacher.dto.request.TeacherAccountPageRequestDTO;
 import com.beelinkers.englebee.teacher.dto.response.TeacherAccountUpdateDTO;
 import com.beelinkers.englebee.teacher.dto.response.TeacherInfoDTO;
@@ -46,10 +48,11 @@ public class TeacherAccountApiController {
   // 선생님 계정 정보 수정
   @PutMapping("/update")
   public ResponseEntity<TeacherAccountUpdateDTO> updateTeacherAccount(
-      @RequestParam("memberSeq") Long memberSeq,
+      @LoginMember SessionMember sessionMember,
       @RequestBody
       TeacherAccountPageRequestDTO updateRequestDTO) {
-    TeacherAccountUpdateDTO updateDTO = teacherAccountService.updateTeacherInfo(memberSeq,
+    TeacherAccountUpdateDTO updateDTO = teacherAccountService.updateTeacherInfo(
+        sessionMember.getSeq(),
         updateRequestDTO);
     return ResponseEntity.ok(updateDTO);
   }

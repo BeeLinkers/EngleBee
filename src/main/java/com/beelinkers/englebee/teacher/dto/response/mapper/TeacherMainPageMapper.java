@@ -2,11 +2,12 @@ package com.beelinkers.englebee.teacher.dto.response.mapper;
 
 import com.beelinkers.englebee.general.domain.entity.Exam;
 import com.beelinkers.englebee.general.domain.entity.Lecture;
-import com.beelinkers.englebee.general.domain.entity.LectureSubjectLevel;
 import com.beelinkers.englebee.general.dto.response.SubjectLevelCodeDTO;
 import com.beelinkers.englebee.teacher.dto.response.TeacherMainPageExamHistoryDTO;
 import com.beelinkers.englebee.teacher.dto.response.TeacherMainPageLectureDTO;
 import com.beelinkers.englebee.teacher.dto.response.TeacherMainPagePendingExamDTO;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -14,22 +15,26 @@ public class TeacherMainPageMapper {
 
   // main > lecture
   public TeacherMainPageLectureDTO teacherMainPageLectureDto(Lecture lecture) {
-    SubjectLevelCodeDTO subjectLevelCodeDTO = null;
+    List<String> subjectCode = lecture.getSubjectLevels().stream()
+        .map(lectureSubjectLevel -> lectureSubjectLevel.getSubjectLevel().getSubjectCode()
+            .getKoreanCode())
+        .collect(Collectors.toList());
 
-    if (lecture.getSubjectLevels() != null && !lecture.getSubjectLevels().isEmpty()) {
-      LectureSubjectLevel firstSubjectLevel = lecture.getSubjectLevels().get(0);
-      subjectLevelCodeDTO = new SubjectLevelCodeDTO(
-          firstSubjectLevel.getSubjectLevel().getSubjectKoreanCode(),
-          firstSubjectLevel.getSubjectLevel().getLevelKoreanCode()
-      );
-    }
+    List<String> levelCode = lecture.getSubjectLevels().stream()
+        .map(lectureSubjectLevel -> lectureSubjectLevel.getSubjectLevel().getLevelCode()
+            .getKoreanCode())
+        .collect(Collectors.toList());
+
+    SubjectLevelCodeDTO subjectLevelCode = new SubjectLevelCodeDTO(subjectCode, levelCode);
+
     return new TeacherMainPageLectureDTO(
         lecture.getSeq(),
-        lecture.getTeacher().getNickname(),
+        lecture.getSeq(),
+        lecture.getStudent().getNickname(),
         lecture.getTitle(),
         lecture.getStatus().name(),
         lecture.getCreatedAt(),
-        subjectLevelCodeDTO
+        subjectLevelCode
     );
   }
 

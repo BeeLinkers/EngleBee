@@ -26,10 +26,11 @@ public class TeacherMainApiController {
   @GetMapping("/lecture")
   public ResponseEntity<List<TeacherMainPageLectureDTO>> getOngoingLecture(
       @RequestParam("memberSeq") Long memberSeq,
+      @RequestParam("lectureSeq") Long lectureSeq,
       @RequestParam("lectureStatus") String lectureStatus) {
     LectureStatus status = LectureStatus.valueOf(lectureStatus.toUpperCase());
     List<TeacherMainPageLectureDTO> lectureList = teacherMainService.getOngoingLectureInfo(
-        memberSeq, status
+        memberSeq, lectureSeq, status
     );
     return ResponseEntity.ok(lectureList);
   }

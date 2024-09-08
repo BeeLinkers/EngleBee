@@ -33,11 +33,17 @@ public class AccountPageController {
 
     Long memberSeq = sessionMember.getSeq();
     Role memberRole = sessionMember.getRole();
-    String nickname = accountService.getNickname(memberSeq);
-    model.addAttribute("nickname", nickname);
-    model.addAttribute("memberSeq", memberSeq);
+    Member member = studentAccountService.getMemberInfo(memberSeq);
+    //String nickname = accountService.getNickname(memberSeq);
 
+    //   StudentAccountPageRequestDTO studentAccountPageRequestDTO = new StudentAccountPageRequestDTO(member.getNickname(),koreaGrade);
+    model.addAttribute("nickname", member.getNickname());
+    model.addAttribute("memberSeq", member.getSeq());
+
+    //   model.addAttribute("studentAccountPageRequestDTO", studentAccountPageRequestDTO);
     if (memberRole.isStudent()) {
+      String koreaGrade = member.getGrade().getKoreanGrade();
+      model.addAttribute("grade", koreaGrade);
       model.addAttribute("isStudent", true);
       return "student/student-account";
     } else if (memberRole.isTeacher()) {
@@ -55,7 +61,8 @@ public class AccountPageController {
 
     Long memberSeq = sessionMember.getSeq();
     Role memberRole = sessionMember.getRole();
-
+    log.info(updateRequestDTO.getGrade());
+    log.info(updateRequestDTO.getNickname());
     if (memberRole.isStudent()) {
       Member updatedMember = studentAccountService.updateStudentInfo(memberSeq, updateRequestDTO);
       StudentAccountPageResponseDTO responseDTO = studentAccountPageMapper.studentAccountResponseDTO(
@@ -68,11 +75,12 @@ public class AccountPageController {
     model.addAttribute("nickname", updatedNickname);
     model.addAttribute("memberSeq", memberSeq);
 
-    if (memberRole.isStudent()) {
-      return "student/student-account";
-    } else if (memberRole.isTeacher()) {
-      return "teacher/teacher-account";
-    }
     return "redirect:/account";
+//    if (memberRole.isStudent()) {
+//      return "student/student-account";
+//    } else if (memberRole.isTeacher()) {
+//      return "teacher/teacher-account";
+//    }
+//    return "redirect:/account";
   }
 }

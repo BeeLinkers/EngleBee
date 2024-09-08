@@ -61,7 +61,7 @@ public class StudentMainApiControllerTest {
 
     SubjectLevelCodeDTO subjectLevelCode = new SubjectLevelCodeDTO();
     StudentMainPageLectureDTO lecturePageList = new StudentMainPageLectureDTO(
-        1L, "teacher", "기초어법강의", "CREATED", LocalDateTime.now(), subjectLevelCode
+        1L, 1L, "teacher", "기초어법강의", "CREATED", LocalDateTime.now(), subjectLevelCode
     );
     List<StudentMainPageLectureDTO> lectureList = List.of(lecturePageList);
 

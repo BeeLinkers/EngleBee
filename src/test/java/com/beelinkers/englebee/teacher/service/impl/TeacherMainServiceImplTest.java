@@ -64,7 +64,7 @@ public class TeacherMainServiceImplTest {
     List<Lecture> lectureList = List.of(lecture);
 
     TeacherMainPageLectureDTO lectureDTO = new TeacherMainPageLectureDTO(
-        1L, "student1", "기초문법강의", "CREATED", LocalDateTime.now(), lecturePage.get(0)
+        1L, 1L, "student1", "기초문법강의", "CREATED", LocalDateTime.now(), lecturePage.get(0)
     );
     when(lectureRepository.findByTeacherSeqAndStatus(
         3L, LectureStatus.CREATED

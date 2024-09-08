@@ -30,7 +30,7 @@
             <!-- 계정정보  -->
             <div id="fadeIn">
               <div class="card mb-4">
-                <div class="card-header"><h1 class="text-google"><b>oooo님 계정 정보</b></h1></div>
+                <div class="card-header"><h1 class="text-google"><b th:text="${nickname} + '의 계정정보'">계정 정보</b></h1></div>
                 <div class="card-body">
 
 
@@ -81,8 +81,8 @@
                               <div class="mb-3 col-md-6">
                                 <label class="middle mb-1"><b>닉네임을 입력하세요 (최대 20자)</b></label>
                                 <div class="mb-3 d-flex align-items-center">
-                                  <input class="form-control me-2" style="width: 300px;"
-                                         name="nickname" type="text" placeholder="닉네임">
+                                  <input id="nickname" class="form-control me-2" style="width: 300px;"
+                                         name="nickname" type="text" placeholder="닉네임" th:value="${nickname}">
                                   <button class="btn btn-primary" style="width: auto;">중복확인</button>
                                 </div>
                               </div>
@@ -90,20 +90,20 @@
                               <div class="mb-3 col-md-6">
                                 <label class="middle mb-1"><b>학년을 입력하세요.</b></label>
                                 <div class="mb-3 col-md-12">
-                                  <select name="mh" class="form-control">
-                                    <option value="m1" selected="">중1</option>
-                                    <option value="m2">중2</option>
-                                    <option value="m3">중3</option>
-                                    <option value="h1">고1</option>
-                                    <option value="h2">고2</option>
-                                    <option value="h3">고3</option>
+                                  <select id="grade" name="grade" class="form-control">
+                                    <option value="중1" th:selected="${grade == '중1'}">중1</option>
+                                    <option value="중2" th:selected="${grade == '중2'}">중2</option>
+                                    <option value="중3" th:selected="${grade == '중3'}">중3</option>
+                                    <option value="고1" th:selected="${grade == '고1'}">고1</option>
+                                    <option value="고2" th:selected="${grade == '고2'}">고2</option>
+                                    <option value="고3" th:selected="${grade == '고3'}">고3</option>
                                   </select>
                                 </div>
                               </div>
                             </div>
                             <hr>
                             <div class="d-flex mt-4 justify-content-center">
-                              <button class="btn btn-primary me-2" type="button">회원정보 수정</button>
+                              <button id="update-button" class="btn btn-primary me-2" type="button">회원정보 수정</button>
                               <button class="btn btn-danger" type="button">회원 탈퇴</button>
                             </div>
 
@@ -140,7 +140,37 @@
 
 <!-- 공통 <script> 포함 -->
 <div th:replace="~{fragments/scripts :: scripts}"></div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(function(){
+    $("#update-button").click(function(){
+      let nickname = $('#nickname').val();
+      let grade = $('#grade option:selected').text();
 
+      // 닉네임과 학년을 alert 창으로 표시
+      $.ajax({
+        url: '/api/student/account/update', // 요청할 URL (서버의 엔드포인트)
+        type: 'PUT', // 요청 방식 (POST, GET, PUT 등)
+        contentType: 'application/json', // 전송할 데이터의 타입
+        data: JSON.stringify({
+          nickname: nickname,
+          grade: grade
+        }),
+        success: function(response) {
+          // 요청이 성공적으로 완료되었을 때 실행될 코드
+          alert('회원정보가 성공적으로 수정되었습니다.');
+          // 필요에 따라 페이지를 리다이렉트하거나 업데이트할 수 있습니다.
+          window.location.href = '/account';
+        },
+        error: function(xhr, status, error) {
+          // 요청이 실패했을 때 실행될 코드
+          alert('회원정보 수정 중 오류가 발생했습니다: ' + error);
+        }
+      });
+
+    })
+  })
+</script>
 
 </body>
 

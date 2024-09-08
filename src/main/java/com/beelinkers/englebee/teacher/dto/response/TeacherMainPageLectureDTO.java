@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class TeacherMainPageLectureDTO {
 
   private Long id;
+  private Long lectureSeq;
   private String studentNickname;
   private String title;
   private String status;
