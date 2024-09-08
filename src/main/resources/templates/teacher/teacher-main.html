@@ -26,66 +26,80 @@
 
           <!-- 선생님 : 현재 수업할 강의 -->
           <div class="col-xxl-4 col-xl-12 mb-4">
+            <!--            <div-->
+            <!--                th:classappend="${ongoingLectures != null and !ongoingLectures.isEmpty()} ? 'h-100'">-->
             <div class="card h-100">
-              <div class="card">
+              <div class="card ">
                 <div class="card-header">
                   <ul class="nav nav-tabs card-header-tabs" id="cardTab" role="tablist">
-                    <li class="nav-item" role="presentation"><a class="nav-link active"
-                                                                id="overview-tab" href="#overview"
-                                                                data-bs-toggle="tab" role="tab"
-                                                                aria-controls="overview"
-                                                                aria-selected="true">현재 수업할 강의</a>
+                    <li class="nav-item" role="presentation">
+                      <a class="nav-link active"
+                         id="overview-tab" href="#overview-lectures"
+                         data-bs-toggle="tab" role="tab"
+                         aria-controls="overview-lectures"
+                         th:classappend="${ongoingLectures != null and !ongoingLectures.isEmpty()} ? 'active' : ''"
+                         aria-selected="true">현재 수업할 강의</a>
                     </li>
-                    <li class="nav-item" role="presentation"><a class="nav-link" id="example-tab"
-                                                                href="#example" data-bs-toggle="tab"
-                                                                role="tab" aria-controls="example"
-                                                                aria-selected="false" tabindex="-1">수업생성하기</a>
+                    <li class="nav-item" role="presentation">
+                      <a class="nav-link" id="example-tab"
+                         href="#example" data-bs-toggle="tab"
+                         role="tab" aria-controls="example"
+                         aria-selected="false" tabindex="-1">수업생성하기</a>
                     </li>
                   </ul>
                 </div>
                 <div class="card-body">
                   <div class="tab-content" id="cardTabContent">
-                    <div class="tab-pane fade active show" id="overview" role="tabpanel"
-                         aria-labelledby="overview-tab">
+                    <div th:if="${ongoingLectures != null and !ongoingLectures.isEmpty()}"
+                         class="tab-pane fade" id="overview-lectures" role="tabpanel"
+                         th:classappend="'active show'" aria-labelledby="overview-tab">
                       <table class="datatable-table">
                         <tbody>
                         <tr>
                           <th>강의명</th>
-                          <td>스프링 부트 실무 활용</td>
+                          <td th:text="${ongoingLectures[0].title}">스프링 부트 실무 활용</td>
                         </tr>
                         <tr>
                           <th>학생명</th>
-                          <td>나학생</td>
+                          <td th:text="${ongoingLectures[0].studentNickname}">나학생</td>
                         </tr>
                         <tr>
                           <th>수업일</th>
-                          <td>2022-10-12 10:24:57</td>
+                          <td th:text="${#temporals.format(ongoingLectures[0].createdAt, 'yyyy-MM-dd HH:mm:ss')}">
+                            2022-10-12 10:24:57
+                          </td>
                         </tr>
                         <tr>
                           <th>과목 및 레벨</th>
                           <td>
-                            <p></p>
-                            <div class="badge bg-warning rounded-pill">문법 : 중</div>
-                            <p></p>
-                            <p></p>
-                            <div class="badge bg-secondary text-white rounded-pill">어휘 : 하</div>
-                            <p></p>
-                            <p></p>
-                            <div class="badge bg-info rounded-pill">문법 : 중</div>
-                            <p></p>
-                            <p></p>
-                            <div class="badge bg-primary text-white rounded-pill">어휘 : 하</div>
-                            <p></p>
+                            <div>
+                              <div th:each="lecture : ${ongoingLectures}"
+                                   style="display: inline-block; margin-right: 10px;">
+                                <!--                                <div class="badge bg-warning rounded-pill">-->
+                                <!--                                                                    <span th:text="${lecture.subjectLevelCode.subjectCode}"></span>:-->
+                                <!--                                                                    <span th:text="${lecture.subjectLevelCode.levelCode}"></span>-->
+                                <!--                                </div>-->
+                                <div th:if="${lecture.subjectLevelCode != null}"
+                                     class="badge bg-warning rounded-pill"
+                                     style="display: inline-block; margin-right: 10px;">
+                                  <span th:text="${lecture.subjectLevelCode.subjectCode}"></span>:
+                                  <span th:text="${lecture.subjectLevelCode.levelCode}"></span>
+                                </div>
+                              </div>
+                            </div>
                           </td>
                         </tr>
                         </tbody>
                       </table>
-                      <a class="btn btn-primary btn-sm justify-content-center" th:href="@{/chat}"
+                      <a class="btn btn-primary btn-sm justify-content-center"
+                         th:href="@{'/chat/' + ${ongoingLectures[0].id}}"
                          target="_blank">
+
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                             stroke-linecap="round" stroke-linejoin="round"
-                             class="feather feather-external-link me-1">
+                             viewBox="0 0 24 24"
+                             fill="none" stroke="currentColor" stroke-width="2"
+                             stroke-linecap="round"
+                             stroke-linejoin="round" class="feather feather-external-link me-1">
                           <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
                           <polyline points="15 3 21 3 21 9"></polyline>
                           <line x1="10" y1="14" x2="21" y2="3"></line>
@@ -93,79 +107,73 @@
                         강의실 입장
                       </a>
                     </div>
+                    <div th:if="${ongoingLectures == null || ongoingLectures.isEmpty()}"
+                         class="tab-pane fade" id="overview-empty" role="tabpanel"
+                         th:classappend="'active show'" aria-labelledby="overview-tab">
+                      <table class="datatable-table">
+                        <tbody style="text-align: center">
+                        <tr>
+                          <td>등록된 수업이 없습니다.</td>
+                        </tr>
+                        </tbody>
+                      </table>
+                    </div>
 
                     <!-- 선생님 : 수업생성하기 -->
                     <div class="tab-pane fade" id="example" role="tabpanel"
                          aria-labelledby="example-tab">
-
-
-                        <table class="datatable-table">
-                          <tbody>
-                          <tr>
-                            <th>강의명</th>
-                            <td><input id="lecture-title" name="" class="form-control" type="text" placeholder=""></td>
-                          </tr>
-                          <tr>
-                            <th>학생 닉네임</th>
-                            <td><input id="student-nickname" name="" class="form-control" type="text" placeholder=""></td>
-                          </tr>
-<!--                          <tr>-->
-<!--                            <th>수업일</th>-->
-<!--                            <td>-->
-<!--                              <div class="input-group input-group-joined" style="width: 16.5rem">-->
-<!--                                <span class="input-group-text"><svg-->
-<!--                                    xmlns="http://www.w3.org/2000/svg" width="24" height="24"-->
-<!--                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"-->
-<!--                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"-->
-<!--                                    class="feather feather-calendar"><rect x="3" y="4" width="18"-->
-<!--                                                                           height="18" rx="2"-->
-<!--                                                                           ry="2"></rect><line-->
-<!--                                    x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8"-->
-<!--                                                                               y2="6"></line><line-->
-<!--                                    x1="3" y1="10" x2="21" y2="10"></line></svg></span>-->
-<!--                                <input class="form-control ps-0 pointer" id="litepicker"-->
-<!--                                       placeholder="Select date range...">-->
-<!--                              </div>-->
-<!--                            </td>-->
-<!--                          </tr>-->
-                          <tr>
-                            <th>과목/레벨</th>
-                            <td>
-                              단어 : <select id="wordLevel" name="lebel" class="datatable-selector">
-                              <option value=" " selected="">선택안함</option>
-                              <option value="상">상</option>
-                              <option value="중상">중상</option>
-                              <option value="중">중</option>
-                              <option value="중하">중하</option>
-                              <option value="하">하</option>
-                            </select>
-                              <p></p>
-                              <p></p>
-                              문장 : <select id="sentenceLevel" name="lebel" class="datatable-selector">
-                              <option value=" " selected="">선택안함</option>
-                              <option value="상">상</option>
-                              <option value="중상">중상</option>
-                              <option value="중">중</option>
-                              <option value="중하">중하</option>
-                              <option value="하">하</option>
-                            </select>
-                              <p></p>
-                              <p></p>
-                              어법 : <select id="grammerLevel" name="lebel" class="datatable-selector">
-                              <option value=" " selected="">선택안함</option>
-                              <option value="상">상</option>
-                              <option value="중상">중상</option>
-                              <option value="중">중</option>
-                              <option value="중하">중하</option>
-                              <option value="하">하</option>
-                            </select>
-                            </td>
-                          </tr>
-                          </tbody>
-                        </table>
-                        <div class="mb-3 col-12 d-flex justify-content-center">
-                          <button id="register-lecture-button" class="btn btn-primary" role="button">수업 생성하기</button>
-                        </div>
+                      <table class="datatable-table">
+                        <tbody>
+                        <tr>
+                          <th>강의명</th>
+                          <td><input id="lecture-title" name="" class="form-control" type="text"
+                                     placeholder=""></td>
+                        </tr>
+                        <tr>
+                          <th>학생 닉네임</th>
+                          <td><input id="student-nickname" name="" class="form-control" type="text"
+                                     placeholder=""></td>
+                        </tr>
+                        <tr>
+                          <th>과목/레벨</th>
+                          <td>
+                            단어 : <select id="wordLevel" name="lebel" class="datatable-selector">
+                            <option value=" " selected="">선택안함</option>
+                            <option value="상">상</option>
+                            <option value="중상">중상</option>
+                            <option value="중">중</option>
+                            <option value="중하">중하</option>
+                            <option value="하">하</option>
+                          </select>
+                            <p></p>
+                            <p></p>
+                            문장 : <select id="sentenceLevel" name="lebel" class="datatable-selector">
+                            <option value=" " selected="">선택안함</option>
+                            <option value="상">상</option>
+                            <option value="중상">중상</option>
+                            <option value="중">중</option>
+                            <option value="중하">중하</option>
+                            <option value="하">하</option>
+                          </select>
+                            <p></p>
+                            <p></p>
+                            어법 : <select id="grammerLevel" name="lebel" class="datatable-selector">
+                            <option value=" " selected="">선택안함</option>
+                            <option value="상">상</option>
+                            <option value="중상">중상</option>
+                            <option value="중">중</option>
+                            <option value="중하">중하</option>
+                            <option value="하">하</option>
+                          </select>
+                          </td>
+                        </tr>
+                        </tbody>
+                      </table>
+                      <div class="mb-3 col-12 d-flex justify-content-center">
+                        <button id="register-lecture-button" class="btn btn-primary" role="button">
+                          수업 생성하기
+                        </button>
+                      </div>
 
                     </div>
                   </div>
@@ -194,30 +202,17 @@
                           <th>학생명</th>
                           <th>등록일</th>
                         </tr>
-                        <tr>
-                          <td><a th:href="@{/exam/detail/1}">lec01.스프링 AOP</a></td>
-                          <td>아무개</td>
-                          <td>2024-01-01</td>
+                        <tr th:if="${pendingExams == null || pendingExams.isEmpty()}">
+                          <td colspan="3">등록된 시험이 없습니다.</td>
                         </tr>
-                        <tr>
-                          <td><a th:href="@{/exam/detail/2}">lec02.스프링 MVC</a></td>
-                          <td>아무개</td>
-                          <td>2024-01-01</td>
-                        </tr>
-                        <tr>
-                          <td><a th:href="@{/exam/detail/3}">lec03.BOOT</a></td>
-                          <td>홍길동</td>
-                          <td>2024-01-01</td>
-                        </tr>
-                        <tr>
-                          <td><a th:href="@{/exam/detail/4}">lec04.oracle</a></td>
-                          <td>아무개</td>
-                          <td>2024-01-01</td>
-                        </tr>
-                        <tr>
-                          <td><a th:href="@{/exam/detail/5}">lec05.oauth</a></td>
-                          <td>아무개</td>
-                          <td>2024-01-01</td>
+                        <tr th:each="exam : ${pendingExams}">
+                          <td>
+                            <a th:href="@{'/exam/register/' + ${exam.seq}}"
+                               th:text="${exam.title}">강의명</a>
+                          </td>
+                          <td th:text="${exam.studentNickname}">학생명</td>
+                          <td th:text="${#temporals.format(exam.createdAt, 'yyyy-MM-dd')}">등록일
+                          </td>
                         </tr>
                       </table>
 
@@ -247,30 +242,17 @@
                           <th>학생명</th>
                           <th>등록일</th>
                         </tr>
-                        <tr>
-                          <td><a th:href="@{/exam/detail/1}">lec01.할수있다 자바</a></td>
-                          <td>홍길동</td>
-                          <td>2024-01-01</td>
+                        <tr th:if="${completedExams == null || completedExams.isEmpty()}">
+                          <td colspan="3">등록된 시험이 없습니다.</td>
                         </tr>
-                        <tr>
-                          <td><a th:href="@{/exam/detail/2}">lec02.할수있다 자바</a></td>
-                          <td>홍길동</td>
-                          <td>2024-01-01</td>
-                        </tr>
-                        <tr>
-                          <td><a th:href="@{/exam/detail/3}">lec03.할수있다 자바</a></td>
-                          <td>홍길동</td>
-                          <td>2024-01-01</td>
-                        </tr>
-                        <tr>
-                          <td><a th:href="@{/exam/detail/4}">lec04.할수있다 자바</a></td>
-                          <td>홍길동</td>
-                          <td>2024-01-01</td>
-                        </tr>
-                        <tr>
-                          <td><a th:href="@{/exam/detail/5}">lec05.할수있다 자바</a></td>
-                          <td>홍길동</td>
-                          <td>2024-01-01</td>
+                        <tr th:if="exam != null" th:each="exam : ${completedExams}">
+                          <td>
+                            <a th:href="@{'/exam/detail/' + ${exam.seq}}"
+                               th:text="${exam.title}">강의명</a>
+                          </td>
+                          <td th:text="${exam.studentNickname}">학생명</td>
+                          <td th:text="${#temporals.format(exam.createdAt, 'yyyy-MM-dd')}">등록일
+                          </td>
                         </tr>
                       </table>
 
@@ -284,9 +266,6 @@
 
         </div>
       </div>
-      <!-- --------------------------- [중앙 : 컨텐츠 END]  ------------------------------------->
-
-
     </main>
 
 
@@ -298,9 +277,73 @@
 
 
 <!-- 공통 <script> 포함 -->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <div th:replace="~{fragments/scripts :: scripts}"></div>
 <script th:src="@{/js/register-lecture.js}"></script>
+<script type="text/javascript">
+  $(document).ready(function () {
+
+    $("#register-lecture-button").click(function () {
+      let wordLevel = $("#wordLevel").val();
+      let senetenceLevel = $("#sentenceLevel").val();
+      let grammerLevel = $("#grammerLevel").val();
+      let studentNickname = $("#student-nickname").val();
+      let lectureTitle = $("#lecture-title").val();
+
+      let subjectLevels = [
+        {
+          "subject": "단어",
+          "level": wordLevel
+        },
+        {
+          "subject": "문장",
+          "level": senetenceLevel
+        },
+        {
+          "subject": "어법",
+          "level": grammerLevel
+        }
+      ];
+
+      let data = JSON.stringify({
+        "studentNickname": studentNickname,
+        "lectureTitle": lectureTitle,
+        "subjectLevels": subjectLevels
+      })
+
+      if (!studentNickname) {
+        alert("학생 닉네임을 입력하세요");
+      } else if (!lectureTitle) {
+        alert("수업명을 입력하세요");
+      } else {
+
+        $.ajax({
+          url: '/api/teacher/lecture/register',
+          method: 'POST',
+          contentType: "application/json",
+          data: data
+          ,
+          success: function (data) {
+            console.log("성공");
+            console.log(data);
+            alert("수업 생성되었습니다");
+          },
+
+          error: function (jqXHR, textStatus, errorThrown) {
+            console.error('[ERROR] 데이터를 불러오던 도중 에러가 발생했습니다');
+            console.log(jqXHR.responseText);
+            console.error(jqXHR.responseText);
+            alert(jqXHR.responseText);
+          }
+        });
+
+      }
+
+    })
+
+  })
+</script>
 
 </body>
 </html>
