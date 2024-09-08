@@ -17,6 +17,8 @@ import com.beelinkers.englebee.general.dto.response.mapper.QnaDetailPageResponse
 import com.beelinkers.englebee.general.dto.response.mapper.QnaPageResponseMapper;
 import com.beelinkers.englebee.general.dto.response.mapper.ReplyResponseMapper;
 import com.beelinkers.englebee.general.exception.ExamNotFoundException;
+import com.beelinkers.englebee.general.exception.MemberNotFoundException;
+import com.beelinkers.englebee.general.llm.GptQnaProxy;
 import com.beelinkers.englebee.general.service.QnaService;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,6 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class QnaServiceImpl implements QnaService {
 
+  private final GptQnaProxy qnaProxy;
   private final QuestionRepository questionRepository;
   private final QnaPageResponseMapper qnaPageMapper;
   private final MemberRepository memberRepository;
@@ -48,6 +51,17 @@ public class QnaServiceImpl implements QnaService {
         .orElseThrow(() -> new IllegalArgumentException("해당 사용자를 찾을 수 없습니다."));
     Question questionRegister = qnaPageRequestMapper.registerQnaDTO(qnaRequestDTO, member);
     questionRepository.save(questionRegister);
+
+    // EngleBee 유저로 댓글 생성
+    Member engleBee = memberRepository.findByNickname("EngleBee")
+        .orElseThrow(() -> new MemberNotFoundException("해당하는 멤버가 존재하지 않습니다."));
+    String gptReplyContent = qnaProxy.makeAutoReply(questionRegister.getContent());
+    Reply firstReply = Reply.builder()
+        .question(questionRegister)
+        .author(engleBee)
+        .content(gptReplyContent)
+        .build();
+    replyRepository.save(firstReply);
   }
 
   @Override

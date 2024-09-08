@@ -1,167 +1,180 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head}">
 
-<head th:replace="fragments/header :: head"></head>
+  <style>
+    .circle {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: 2px solid #000;
+      display: inline-block;
+      cursor: pointer;
+      margin: 10px;
+    }
+
+    .checked {
+      background-color: black;
+    }
+  </style>
+</head>
 
 <body class="bg-white">
-
-<!-- --------------------------- [FRAGMENT : 상단 네이게이션바]  ------------------------------------->
-<div th:replace="fragments/top-nav :: top-nav"></div>
+<!-- 상단 네비게이션바 -->
+<div th:replace="~{fragments/top-nav :: top-nav}"></div>
 
 <div id="layoutSidenav">
-  <div id="layoutSidenav_nav">
-  </div>
+  <div id="layoutSidenav_nav"></div>
   <div id="layoutSidenav_content">
     <main>
+      <!-- 배너 -->
+      <div th:replace="~{fragments/top-banner :: top-banner}"></div>
 
-      <!-- --------------------------- [FRAGMENT : 배너]  ------------------------------------->
-      <div th:replace="fragments/top-banner :: top-banner"></div>
-
-      <!-- --------------------------- [중앙 : 컨텐츠 START]  ------------------------------------->
-
-
+      <!-- 컨텐츠 시작 -->
       <div class="container-xl px-4 mt-n10">
-        <!-- Wizard card example with navigation-->
         <div class="card">
           <div class="card-header border-bottom">
-            <!-- Wizard navigation  -->
             <div class="nav nav-pills nav-justified flex-column flex-xl-row nav-wizard">
-
-
-              <!-- Wizard navigation item 1-->
-              <a th:href="@{/exam/detail/1}">
-                <div class="nav-item nav-link">
-                  <div class="wizard-step-icon">1</div>
-                  <div class="wizard-step-text">
-                    <div class="wizard-step-text-name">시험출제</div>
-                    <div class="wizard-step-text-details">시험 문제 등록합니다.</div>
-                  </div>
-                </div>
-              </a>
-
-
-              <!-- Wizard navigation item 2 -->
-              <a th:href="@{/exam/detail/1}">
-                <div class="nav-item nav-link">
-                  <div class="wizard-step-icon">1</div>
-                  <div class="wizard-step-text">
-                    <div class="wizard-step-text-name">시험상세조회</div>
-                    <div class="wizard-step-text-details">출제한 문제 상세보기 입니다.</div>
-                  </div>
-                </div>
-              </a>
-
-              <!-- Wizard navigation item 3-->
-              <a th:href="@{/exam/detail/1}">
-                <div class="nav-item nav-link">
-                  <div class="wizard-step-icon">3</div>
-                  <div class="wizard-step-text">
-                    <div class="wizard-step-text-name">피드백작성</div>
-                    <div class="wizard-step-text-details">제출 답안에 대한 첨삭 등록합니다.</div>
-                  </div>
-                </div>
-              </a>
-
-              <!-- Wizard navigation item 4  *************************** -->
-              <a class="nav-item nav-link active" href="#wizard4">
-                <div class="wizard-step-icon">4</div>
+              <a class="nav-item nav-link active" href="#wizard1">
+                <div class="wizard-step-icon">Solve</div>
                 <div class="wizard-step-text">
-                  <div class="wizard-step-text-name">제출답안</div>
-                  <div class="wizard-step-text-details">학생이 제출한 답안보기 입니다.</div>
+                  <div class="wizard-step-text-name">시험풀기</div>
+                  <div class="wizard-step-text-details">문제를 풀고 제출합니다.</div>
                 </div>
               </a>
-
             </div>
           </div>
 
-
-          <div class="card-body">
+          <div class="card-body" >
             <div class="tab-content" id="cardTabContent">
-              <!-- Wizard tab pane item 1-->
+              <div class="tab-pane py-1 fade active show" id="wizard1" role="tabpanel"
+                   aria-labelledby="wizard1-tab">
+                <div class="mb-3">
+                  <p style="font-size: 20px; font-weight: bold; margin-bottom: 8px; color:black">
+                    시험 제목: <strong th:data-examSeq="${examSeq}" id="exam-title" th:text="${examTitle}"></strong>
+                  </p>
 
-              <!---------------------------------------------------------------------------------->
-              <div style="margin-top: 0;" class="tab-pane py-1 fade active show" id="wizard4"
-                   role="tabpanel" aria-labelledby="wizard4-tab">
-                <div class="row">
-                  <div class="col-lg-8">
+                </div>
+                <div class="row" th:each="question : ${teacherQuestions}">
+                  <div class="card mb-4 question-set">
+                    <!-- 시험 제목 입력 필드 추가 -->
 
-                    exm-solve.html
-                    exm-solve.html
-                    exm-solve.html
-                    exm-solve.html
-
-
-                  </div>
-
-                  <!-- Chat GPT  Sticky Navigation-->
-                  <div class="col-lg-4">
-                    <div class="nav-sticky">
-                      <div class="card">
-                        <div class="card-header">
-                          <img th:src="@{/assets/img/gpt_icon.png}" height="35">
+                    <!-- 문제 세트를 추가할 영역 -->
+                    <div class="card-body">
+                      <form class="teacherQuestionSeq">
+                        <div class="mb-3">
+                          <label class="small mb-1"><b>문제 내용</b></label>
+                          <textarea class="form-control auto-resize question-direction direction" rows="1" style="height: auto; overflow: hidden; resize: none; font-weight: bold; " th:data-teacherquestion="${question.teacherQuestionSeq}" th:text="${question.direction}" disabled></textarea>
                         </div>
-
-                        <div class="card-body mb-3 justify-content-center">
-                          <form>
-<textarea class="form-control" rows="20">
-GPT에서 받아온 내용이 출력됩니다.
-GPT에서 받아온 내용이 출력됩니다.
-GPT에서 받아온 내용이 출력됩니다.
-GPT에서 받아온 내용이 출력됩니다.
-</textarea>
-                            <br>
-                            <button class="btn btn-success">GPT에게 추천받기</button>
-                          </form>
+                        <div class="mb-0" th:each="choice, iterStat : ${question.choices}">
+                          <div class="form-check mb-2 d-flex align-items-center">
+                            <span class="circle choice-index" th:text="${iterStat.index + 1}"></span>
+                            <textarea class="form-control auto-resize choice-1 choice" rows="1" th:text="${choice}" disabled></textarea>
+                          </div>
                         </div>
-                      </div>
+                      </form>
                     </div>
                   </div>
                 </div>
 
+                  <div class="row">
+                    <div class="card mb-4 question-set">
+                    </div>
+                </div>
+
                 <div class="d-flex justify-content-center mb-3">
-                  <button class="btn btn-primary" type="button">출제완료</button>
+                  <button class="btn btn-primary" type="button" id="submit-btn" disabled>제출하기
+                  </button>
                 </div>
               </div>
-              <!---------------------------------------------------------------------------------->
-
-
             </div>
           </div>
         </div>
       </div>
-
-
-      <!-- --------------------------- [중앙 : 컨텐츠 END]  ------------------------------------->
-
+      <!-- 컨텐츠 끝 -->
     </main>
 
-    <!-- --------------------------- [FRAGMENT : 하단] ------------------------------------->
-    <footer th:replace="fragments/footer :: footer"></footer>
-
+    <!-- 하단 -->
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
   </div>
 </div>
 
-<!-- 공통 <script> 포함 -->
-<div th:replace="fragments/scripts :: scripts"></div>
+<!-- 공통 스크립트 포함 -->
+<div th:replace="~{fragments/scripts :: scripts}"></div>
 
-<!-- jQuery (필요한 경우) -->
+<!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    var triggerTabList = [].slice.call(document.querySelectorAll('#cardTab a'))
-    triggerTabList.forEach(function (triggerEl) {
-      var tabTrigger = new bootstrap.Tab(triggerEl)
+<script th:inline="javascript">
+  $(document).ready(function () {
 
-      triggerEl.addEventListener('click', function (event) {
-        event.preventDefault()
-        tabTrigger.show()
+    let row_count = $('.direction').length;
+
+    $('.circle').click(function() {
+      let checked_count = $('.checked').length;
+      // 같은 container 안의 선택란만 해제
+       $(this).closest('.card-body').find('.circle').removeClass('checked');
+      // // 클릭한 선택란에 체크 표시
+       $(this).addClass('checked');
+
+
+       if(row_count===checked_count+1){
+         $('#submit-btn').prop('disabled', false);
+       }
+    });
+
+
+    $("#submit-btn").click(function(){
+
+      let examSeq = $('#exam-title').data('examseq');
+
+      let checked_list = [];
+      $('.checked').each(function(index, element) {
+        let checked = $(element).text();
+        checked_list.push(checked);
+      });
+
+      let tearcher_question_seq_list = []
+      $('.direction').each(function(index,element){
+        let teacher_question_seq = $(element).data('teacherquestion');
+        tearcher_question_seq_list.push(teacher_question_seq);
       })
+
+
+      // 서버에 보낼 데이터를 구성
+      let studentAnswerList = [];
+      for(let i = 0; i < tearcher_question_seq_list.length; i++) {
+        studentAnswerList.push({
+          teacherQuestionSeq: tearcher_question_seq_list[i],
+          studentAnswer: checked_list[i]
+        });
+      }
+
+      // AJAX 요청
+      $.ajax({
+        url: `/api/student/exam/submit/${examSeq}`,
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({
+          studentAnswerToTeacherQuestionDTOs: studentAnswerList
+        }),
+        success: function(response) {
+          alert('시험이 성공적으로 제출되었습니다.');
+          console.log(response);
+          window.location.href = '/main';
+        },
+        error: function(xhr, status, error) {
+          alert(xhr.responseText);
+          console.log(error);
+        }
+      });
+
+
     })
+
   });
 </script>
-
 </body>
 </html>

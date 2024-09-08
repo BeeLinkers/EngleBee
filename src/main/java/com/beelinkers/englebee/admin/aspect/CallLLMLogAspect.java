@@ -15,19 +15,19 @@ public class CallLLMLogAspect {
 
   private final CallLLMLogRepository llmLogRepository;
 
-//  @Pointcut("execution(* com.beelinkers.englebee.teacher.llm.TeacherGptProxy.processTeacherQuestionRecommendation(..))")
-//  public void callLLMMethod(){}
-//
-//  @AfterReturning(pointcut = "callLLMMethod()")
-//  public void logCallLLMMethod(){
-//    int tokenCountInt = 50+(int)(Math.random()*51);
-//    Long tokenCount = Long.valueOf(tokenCountInt);
-//
-//    CallLLMLog llmLog = CallLLMLog.builder()
-//        .tokenCount(tokenCount)
-//        .build();
-//
-//    llmLogRepository.save(llmLog);
-//  }
+  @Pointcut("execution(* com.beelinkers.englebee.teacher.llm.TeacherGptProxy.processTeacherQuestionRecommendation(..))")
+  public void callLLMMethod(){}
+
+  @AfterReturning(pointcut = "callLLMMethod()")
+  public void logCallLLMMethod(){
+    int tokenCountInt = 50+(int)(Math.random()*51);
+    Long tokenCount = Long.valueOf(tokenCountInt);
+
+    CallLLMLog llmLog = CallLLMLog.builder()
+        .tokenCount(tokenCount)
+        .build();
+
+    llmLogRepository.save(llmLog);
+  }
 
 }

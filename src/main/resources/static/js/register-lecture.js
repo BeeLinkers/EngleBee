@@ -45,6 +45,7 @@ $(function(){
         success: function (data) {
           console.log("성공");
           alert("수업 생성되었습니다")
+          window.location.href = '/main';
         },
 
         error: function (jqXHR, textStatus, errorThrown) {

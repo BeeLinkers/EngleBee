@@ -9,23 +9,18 @@
 <!-- --------------------------- [FRAGMENT : 상단 네이게이션바]  ------------------------------------->
 <div th:replace="~{fragments/top-nav :: top-nav}"></div>
 
-
 <div id="layoutSidenav">
-  <div id="layoutSidenav_nav">
-  </div>
+  <div id="layoutSidenav_nav"></div>
   <div id="layoutSidenav_content">
     <main>
 
-
       <!-- --------------------------- [FRAGMENT : 배너]  ------------------------------------->
       <div th:replace="~{fragments/top-banner :: top-banner}"></div>
-
 
       <!-- --------------------------- [중앙 : 컨텐츠 START]  ------------------------------------->
       <div class="container-xl px-4 mt-n10">
         <div class="row">
           <div class="col-lg-12">
-
 
             <!-- Q&A 글쓰기 입력폼   -->
             <div id="fadeIn">
@@ -37,7 +32,6 @@
                   <form>
                     <div
                         class="datatable-wrapper datatable-loading no-footer sortable searchable fixed-columns">
-
                       <div class="datatable-container">
                         <br>
                         <table id="datatablesSimple" class="datatable-table">
@@ -45,24 +39,21 @@
                           <tr>
                             <th data-sortable="true" style="width: 10%;">제목</th>
                             <td th:text="${qnaDetail.title}"></td>
-
                           </tr>
                           <tr>
                             <th data-sortable="true" style="width: 10%;">작성자</th>
                             <td th:text="${qnaDetail.authorName}"></td>
-
                           </tr>
                           <tr>
                             <th data-sortable="true" style="width: 10%;">등록일</th>
-                            <td><span
-                                th:text="${#temporals.format(qnaDetail.createdAt, 'yyyy-MM-dd')}"></span>
+                            <td>
+                              <span
+                                  th:text="${#temporals.format(qnaDetail.createdAt, 'yyyy-MM-dd')}"></span>
                             </td>
-
                           </tr>
                           <tr>
                             <th data-sortable="true" style="width: 10%;">내용</th>
-                            <td th:text="${qnaDetail.content}">
-                            </td>
+                            <td style="white-space: pre-wrap;" th:text="${qnaDetail.content}"></td>
                           </tr>
                           </tbody>
                         </table>
@@ -70,15 +61,13 @@
                     </div>
                     <hr>
 
-
                     <div class="card mb-4">
-
                       <div class="card-body">
                         <div class="sbp-preview">
                           <div class="sbp-preview-content">
                             <div class="timeline">
 
-                              <!-- 댓글 조회-->
+                              <!-- 댓글 조회 -->
                               <div class="timeline-item" th:each="reply : ${replyList}">
                                 <div class="timeline-item-marker">
                                   <div class="timeline-item-marker-text"
@@ -86,8 +75,8 @@
                                 </div>
                                 <div class="timeline-item-content pt-0">
                                   <div class="card shadow-sm">
-                                    <div class="card-body" th:text="${reply.content}">
-                                    </div>
+                                    <div class="card-body" style="white-space: pre-wrap;"
+                                         th:text="${reply.content}"></div>
                                   </div>
                                 </div>
                               </div>
@@ -102,8 +91,7 @@
                                   <form id="replyPostInsert">
                                     <input type="hidden" name="questionSeq" id="questionSeq"
                                            th:value="${qnaDetail.questionSeq}"/>
-                                    <input type="hidden" id="memberSeq"
-                                           th:value="${memberSeq}"/>
+                                    <input type="hidden" id="memberSeq" th:value="${memberSeq}"/>
                                     <textarea class="form-control" rows="5" id="content"
                                               placeholder="댓글"></textarea>
                                     <div class="col-12 mt-4 d-flex justify-content-center">
@@ -115,44 +103,32 @@
                                 </div>
                               </div>
 
-
                             </div>
                           </div>
-
-
                         </div>
                       </div>
                     </div>
 
-
                   </form>
                   <!--------------------------- -------------->
-
 
                 </div>
               </div>
             </div>
-            <!-- 게시판 목록   -->
-
+            <!-- 게시판 목록 -->
 
           </div>
-
         </div>
       </div>
-
       <!-- --------------------------- [중앙 : 컨텐츠 END]  ------------------------------------->
 
-
     </main>
-
 
     <!-- --------------------------- [FRAGMENT : 하단] ------------------------------------->
     <footer th:replace="~{fragments/footer :: footer}"></footer>
 
-
   </div>
 </div>
-
 
 <!-- 공통 <script> 포함 -->
 <div th:replace="~{fragments/scripts :: scripts}"></div>

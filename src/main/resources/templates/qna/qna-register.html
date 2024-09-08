@@ -8,23 +8,18 @@
 <!-- --------------------------- [FRAGMENT : 상단 네이게이션바]  ------------------------------------->
 <div th:replace="~{fragments/top-nav :: top-nav}"></div>
 
-
 <div id="layoutSidenav">
-  <div id="layoutSidenav_nav">
-  </div>
+  <div id="layoutSidenav_nav"></div>
   <div id="layoutSidenav_content">
     <main>
 
-
       <!-- --------------------------- [FRAGMENT : 배너]  ------------------------------------->
       <div th:replace="~{fragments/top-banner :: top-banner}"></div>
-
 
       <!-- --------------------------- [중앙 : 컨텐츠 START]  ------------------------------------->
       <div class="container-xl px-4 mt-n10">
         <div class="row">
           <div class="col-lg-12">
-
 
             <!-- Q&A 글쓰기 입력폼   -->
             <div id="fadeIn">
@@ -36,7 +31,6 @@
                   <form>
                     <div
                         class="datatable-wrapper datatable-loading no-footer sortable searchable fixed-columns">
-
                       <div class="datatable-container">
                         <br>
                         <table id="datatablesSimple" class="datatable-table">
@@ -45,15 +39,12 @@
                           <tr>
                             <th data-sortable="true" style="width: 10%;">제목</th>
                             <td><input class="form-control" name="title" type="text"
-                                       id="questionTitle" placeholder="제목"/>
-                            </td>
-
+                                       id="questionTitle" placeholder="제목"/></td>
                           </tr>
                           <tr>
                             <th data-sortable="true" style="width: 10%;">내용</th>
-                            <td><textarea class="form-control" rows="20"
-                                          name="contents" id="questionContent"
-                                          placeholder="내용작성"></textarea></td>
+                            <td><textarea class="form-control" rows="20" name="contents"
+                                          id="questionContent" placeholder="내용작성"></textarea></td>
                           </tr>
                           </tbody>
                         </table>
@@ -70,12 +61,10 @@
                   </form>
                   <!--------------------------- -------------->
 
-
                 </div>
               </div>
             </div>
-            <!-- 게시판 목록   -->
-
+            <!-- 게시판 목록 -->
 
           </div>
 
@@ -84,28 +73,72 @@
 
       <!-- --------------------------- [중앙 : 컨텐츠 END]  ------------------------------------->
 
-
     </main>
-
 
     <!-- --------------------------- [FRAGMENT : 하단] ------------------------------------->
     <footer th:replace="~{fragments/footer :: footer}"></footer>
 
-
   </div>
 </div>
-
 
 <!-- 공통 <script> 포함 -->
 <div th:replace="~{fragments/scripts :: scripts}"></div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
   $(document).ready(function () {
+    let loadingInterval;
+
+    // 로딩 메시지를 동적으로 생성하는 함수
+    function showLoadingMessage() {
+      // 로딩 메시지 요소 생성
+      const loadingMessage = $(`
+        <div id="dynamicLoadingMessage" style="
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background: rgba(255, 255, 255, 0.9);
+          padding: 20px 40px;
+          border: 2px solid #444;
+          box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+          z-index: 1000;
+          font-size: 24px; /* 큰 글씨 */
+          font-weight: bold; /* 굵은 글씨 */
+          color: #333;
+          text-align: center;
+        ">
+          등록 중.🐝
+        </div>
+      `);
+
+      // 로딩 메시지 요소를 body에 추가하고 표시
+      $('body').append(loadingMessage);
+
+      // 메시지 반복 업데이트
+      let dotCount = 1;
+      loadingInterval = setInterval(() => {
+        dotCount = (dotCount % 3) + 1;
+        $('#dynamicLoadingMessage').text('등록 중' + '.'.repeat(dotCount) + '🐝');
+      }, 250);
+    }
+
+    // 로딩 메시지를 숨기는 함수
+    function hideLoadingMessage() {
+      clearInterval(loadingInterval);
+      $('#dynamicLoadingMessage').remove();
+    }
+
     $('#submitQuestion').click(function (event) {
       event.preventDefault();
+
+      $(this).prop('disabled', true);
+      // 로딩 메시지 표시
+      showLoadingMessage();
+
       const memberSeq = $('#memberSeq').val();
       const title = $('#questionTitle').val();
       const content = $('#questionContent').val();
+
       $.ajax({
         url: '/api/general/qna/register',
         type: 'POST',
@@ -117,6 +150,10 @@
         }),
         success: function (response) {
           console.log("성공 : " + response);
+
+          // 로딩 메시지 숨기기
+          hideLoadingMessage();
+
           if (response) {
             alert('작성하신 글이 등록되었습니다.');
             window.location.href = "/qna/list";
@@ -126,6 +163,8 @@
         },
         error: function (xhr, status, error) {
           console.error('Error:', error);
+          hideLoadingMessage();
+          $(this).prop('disabled', false);
           alert('글 등록 도중에 오류가 발생했습니다.');
         }
       });
