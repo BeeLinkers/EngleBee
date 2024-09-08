@@ -73,7 +73,7 @@ public class TeacherMainServiceImplTest {
 
     // when
     List<TeacherMainPageLectureDTO> resultLecture = teacherMainService.getOngoingLectureInfo(
-        3L, 1L, LectureStatus.CREATED
+        3L, LectureStatus.CREATED
     );
     // then
     assertThat(resultLecture.size()).isEqualTo(1);
