@@ -60,18 +60,18 @@ public class TeacherMainApiControllerTest {
     List<String> subjectCodes = List.of("어법", "문법");
     List<String> levelCodes = List.of("중", "고");
 
-    SubjectLevelCodeDTO subjectLevelCode = new SubjectLevelCodeDTO(subjectCodes, levelCodes);
+    SubjectLevelCodeDTO subjectLevelCode = new SubjectLevelCodeDTO();
     TeacherMainPageLectureDTO lecturePageList = new TeacherMainPageLectureDTO(
         1L, "user1", "기초어법강의", "CREATED", LocalDateTime.now(), subjectLevelCode
     );
     List<TeacherMainPageLectureDTO> lectureList = List.of(lecturePageList);
 
-    when(teacherMainService.getOngoingLectureInfo(memberSeq, lectureSeq, lectureStatus)).thenReturn(
+    when(teacherMainService.getOngoingLectureInfo(memberSeq, lectureStatus)).thenReturn(
         lectureList);
 
     //when
     ResponseEntity<List<TeacherMainPageLectureDTO>> response = teacherMainApiController.getOngoingLecture(
-        memberSeq, lectureSeq, "CREATED"
+        memberSeq, "CREATED"
     );
 
     //then

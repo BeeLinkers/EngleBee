@@ -59,15 +59,15 @@ public class TeacherMainServiceImplTest {
     List<String> levelCode = List.of("중", "고");
 
     List<SubjectLevelCodeDTO> lecturePage = List.of(
-        new SubjectLevelCodeDTO(subjectCode, levelCode)
+        new SubjectLevelCodeDTO()
     );
     List<Lecture> lectureList = List.of(lecture);
 
     TeacherMainPageLectureDTO lectureDTO = new TeacherMainPageLectureDTO(
         1L, "student1", "기초문법강의", "CREATED", LocalDateTime.now(), lecturePage.get(0)
     );
-    when(lectureRepository.findByTeacherSeqAndSeqAndStatus(
-        3L, 1L, LectureStatus.CREATED
+    when(lectureRepository.findByTeacherSeqAndStatus(
+        3L, LectureStatus.CREATED
     )).thenReturn(lectureList);
     when(teacherMainPageMapper.teacherMainPageLectureDto(lecture)).thenReturn(lectureDTO);
 
