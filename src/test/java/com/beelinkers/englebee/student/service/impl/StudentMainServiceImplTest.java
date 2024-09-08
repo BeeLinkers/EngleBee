@@ -59,7 +59,7 @@ public class StudentMainServiceImplTest {
     List<String> levelCode = List.of("중", "고");
 
     List<SubjectLevelCodeDTO> lecturePage = List.of(
-        new SubjectLevelCodeDTO(subjectCode, levelCode));
+        new SubjectLevelCodeDTO());
 
     List<Lecture> lectures = List.of(lecture);
 
