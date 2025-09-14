@@ -199,10 +199,6 @@ CI / CD
 
 - 유저 종류별 방문 빈도 / 연령대별 방문 빈도 / 시간대별 방문 빈도 / LLM API 호출 기록 (과금용)을 추적 관리할 수 있는 관리자 페이지입니다.
 
-### 발표자료 링크
-
-[발표자료](https://www.canva.com/design/DAGQKukecWg/1k37lTSF9mfcYXH6DbGDnw/view?utm_content=DAGQKukecWg&utm_campaign=share_your_design&utm_medium=link&utm_source=shareyourdesignpanel)
-
 ### 서비스 링크
 
 https://www.englebee.co.kr
